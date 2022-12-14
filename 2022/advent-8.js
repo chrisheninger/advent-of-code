@@ -10,8 +10,9 @@ data.forEach((row) => {
 
 console.log(grid);
 
-const totalRows = grid.length; // 99
-const totalColumns = grid[0].length; // 99
+const totalRows = grid.length; // 5, 99
+const totalColumns = grid[0].length; // 5, 99
+
 const flatTrees = grid.flatMap((row) => row);
 
 const visibleTrees = [];
@@ -20,14 +21,23 @@ function lookRight(startingIndex, comparisonIndex) {
   const startingTree = flatTrees[startingIndex];
   const comparisonTree = flatTrees[comparisonIndex + 1];
 
-  console.log({ startingIndex, comparisonIndex });
-  console.log("bad", comparisonIndex % 5);
+  if (startingIndex === 13) {
+    console.log({
+      startingTree,
+      comparisonTree,
+      startingIndex,
+      comparisonIndex,
+      flatTrees,
+    });
+  }
+
+  if ((comparisonIndex + 1) % 4 === 0) {
+    console.log("yo wtf", comparisonIndex);
+    visibleTrees[startingIndex] = flatTrees[startingIndex];
+    return;
+  }
 
   if (startingTree > comparisonTree) {
-    if (comparisonIndex % 5 === 4) {
-      visibleTrees[startingIndex] = flatTrees[startingIndex];
-      return;
-    }
     lookRight(startingIndex, comparisonIndex + 1);
   }
 }
@@ -35,13 +45,13 @@ function lookLeft(startingIndex, comparisonIndex) {
   const startingTree = flatTrees[startingIndex];
   const comparisonTree = flatTrees[comparisonIndex - 1];
 
+  if (comparisonIndex % 5 === 0) {
+    visibleTrees[startingIndex] = flatTrees[startingIndex];
+    return;
+  }
+
   if (startingTree > comparisonTree) {
-    if (comparisonIndex % 5 === 0) {
-      visibleTrees[startingIndex] = flatTrees[startingIndex];
-      return;
-    } else {
-      lookLeft(startingIndex, comparisonIndex - 1);
-    }
+    lookLeft(startingIndex, comparisonIndex - 1);
   }
 }
 function lookDown(startingIndex, comparisonIndex) {
